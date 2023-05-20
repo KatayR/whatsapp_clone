@@ -8,7 +8,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   void clickHandle(String value) {
     switch (value) {
-      case 'Logout':
+      case 'New group':
+        break;
+      case 'New broadcast':
+        break;
+      case 'Linked devices':
+        break;
+      case 'Starred messages':
         break;
       case 'Settings':
         break;
@@ -39,9 +45,9 @@ class _HomeState extends State<Home> {
                       itemBuilder: (BuildContext context) {
                         return {
                           'New group',
-                          'New Broadcast',
-                          'Linked Devices',
-                          'Starred Messages',
+                          'New broadcast',
+                          'Linked devices',
+                          'Starred messages',
                           'Settings'
                         }.map((String choice) {
                           return PopupMenuItem<String>(
