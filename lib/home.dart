@@ -100,32 +100,18 @@ class _HomeState extends State<Home> {
           ),
           floatingActionButton: pIndex == 0
               ? null
-              : pIndex == 1
-                  ? FloatingActionButton(
-                      backgroundColor: const Color(0xff049789),
-                      child: const Icon(
-                        (Icons.message),
-                        color: Colors.white,
-                      ), // Analyze Button
-                      elevation: 0.1,
-                      onPressed: () {})
-                  : pIndex == 2
-                      ? FloatingActionButton(
-                          backgroundColor: const Color(0xff049789),
-                          child: const Icon(
-                            (Icons.camera_enhance_outlined),
-                            color: Colors.white,
-                          ), // Analyze Button
-                          elevation: 0.1,
-                          onPressed: () {})
-                      : FloatingActionButton(
-                          backgroundColor: const Color(0xff049789),
-                          child: const Icon(
-                            (Icons.call),
-                            color: Colors.white,
-                          ), // Analyze Button
-                          elevation: 0.1,
-                          onPressed: () {}),
+              : FloatingActionButton(
+                  backgroundColor: kWhatsappGreen,
+                  child: Icon(
+                    (pIndex == 1)
+                        ? Icons.message
+                        : (pIndex == 2)
+                            ? Icons.camera_enhance_outlined
+                            : Icons.call,
+                    color: Colors.white,
+                  ), // Analyze Button
+                  elevation: 0.1,
+                  onPressed: () {}),
         ));
   }
 }
