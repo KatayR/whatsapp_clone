@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:whatsapp_clone/provider.dart';
+import 'package:whatsapp_clone/screens/chats.dart';
 import 'package:whatsapp_clone/screens/community.dart';
+import 'package:whatsapp_clone/constants/constants.dart';
+import 'package:whatsapp_clone/screens/statuses.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -26,6 +31,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double tabWidth = width / 5;
+    var pIndex = Provider.of<PageIndexProvider>(context).pIndex;
     return DefaultTabController(
         initialIndex: 1,
         length: 4,
@@ -60,9 +66,13 @@ class _HomeState extends State<Home> {
                         }),
                   ])
                 ]),
-            backgroundColor: Color(0xff128C7E),
+            backgroundColor: kWhatsappGreen,
             bottom: TabBar(
               indicatorColor: Colors.white,
+              onTap: (int index) {
+                Provider.of<PageIndexProvider>(context, listen: false)
+                    .indexUpdater(index);
+              },
               indicatorSize: TabBarIndicatorSize.label,
               isScrollable: true,
               tabs: <Widget>[
@@ -83,11 +93,39 @@ class _HomeState extends State<Home> {
           body: TabBarView(
             children: [
               Community(),
-              Icon(Icons.directions_transit, size: 350),
-              Icon(Icons.directions_car, size: 350),
+              Chats(),
+              Statuses(),
               Icon(Icons.directions_car, size: 350),
             ],
           ),
+          floatingActionButton: pIndex == 0
+              ? null
+              : pIndex == 1
+                  ? FloatingActionButton(
+                      backgroundColor: const Color(0xff049789),
+                      child: const Icon(
+                        (Icons.message),
+                        color: Colors.white,
+                      ), // Analyze Button
+                      elevation: 0.1,
+                      onPressed: () {})
+                  : pIndex == 2
+                      ? FloatingActionButton(
+                          backgroundColor: const Color(0xff049789),
+                          child: const Icon(
+                            (Icons.camera_enhance_outlined),
+                            color: Colors.white,
+                          ), // Analyze Button
+                          elevation: 0.1,
+                          onPressed: () {})
+                      : FloatingActionButton(
+                          backgroundColor: const Color(0xff049789),
+                          child: const Icon(
+                            (Icons.call),
+                            color: Colors.white,
+                          ), // Analyze Button
+                          elevation: 0.1,
+                          onPressed: () {}),
         ));
   }
 }

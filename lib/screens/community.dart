@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:whatsapp_clone/constants/constants.dart';
+
+import '../home.dart';
 
 class Community extends StatefulWidget {
   const Community({Key? key}) : super(key: key);
@@ -42,7 +45,7 @@ class _CommunityState extends State<Community> {
                   'Start your community',
                   style: TextStyle(color: Colors.white),
                 ),
-                color: Color(0xff0b8d80),
+                color: kWhatsappGreenDark,
                 elevation: 0,
                 height: 38,
                 shape: RoundedRectangleBorder(
