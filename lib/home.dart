@@ -5,6 +5,7 @@ import 'package:whatsapp_clone/screens/chats.dart';
 import 'package:whatsapp_clone/screens/community.dart';
 import 'package:whatsapp_clone/constants/constants.dart';
 import 'package:whatsapp_clone/screens/statuses.dart';
+import 'components/status.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -32,6 +33,13 @@ class _HomeState extends State<Home> {
     double width = MediaQuery.of(context).size.width;
     double tabWidth = width / 5;
     var pIndex = Provider.of<PageIndexProvider>(context).pIndex;
+    var currentPage = pIndex == 0
+        ? 'community'
+        : pIndex == 1
+            ? 'chats'
+            : pIndex == 2
+                ? 'status'
+                : 'calls';
     return DefaultTabController(
         initialIndex: 1,
         length: 4,
@@ -98,20 +106,29 @@ class _HomeState extends State<Home> {
               Icon(Icons.directions_car, size: 350),
             ],
           ),
-          floatingActionButton: pIndex == 0
+          floatingActionButton: currentPage == 'community'
               ? null
               : FloatingActionButton(
                   backgroundColor: kWhatsappGreen,
                   child: Icon(
-                    (pIndex == 1)
+                    (currentPage == 'chats')
                         ? Icons.message
-                        : (pIndex == 2)
+                        : (currentPage == 'status')
                             ? Icons.camera_enhance_outlined
                             : Icons.call,
                     color: Colors.white,
                   ), // Analyze Button
+                  onPressed: () {
+                    (currentPage == 'community')
+                        ? null
+                        : (currentPage == 'chats')
+                            ? print('message')
+                            : (currentPage == 'status')
+                                ? Status(sender: 'me').postStatus('me')
+                                : print('call someone');
+                  },
                   elevation: 0.1,
-                  onPressed: () {}),
+                ),
         ));
   }
 }
