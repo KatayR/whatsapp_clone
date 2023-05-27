@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:whatsapp_clone/constants/constants.dart';
 import 'package:whatsapp_clone/data/people.dart';
@@ -5,6 +6,7 @@ import 'package:whatsapp_clone/home.dart';
 import 'package:whatsapp_clone/components/status.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Statuses extends StatefulWidget {
   const Statuses({Key? key}) : super(key: key);
@@ -31,19 +33,29 @@ class _StatusesState extends State<Statuses> {
 }
 
 class myStatusBlock extends StatelessWidget {
-  const myStatusBlock({
+  myStatusBlock({
     super.key,
     required this.myUser,
   });
-
   final People myUser;
+  var active_statusPost = false;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        final post = await ImagePicker().pickImage(source: ImageSource.camera);
-        if (post == null) return;
+        if (!active_statusPost) {
+          final post =
+              await ImagePicker().pickImage(source: ImageSource.camera);
+          if (post == null) return;
+          final path = 'status_files/${post.name}';
+          final postTemp = File(post.path);
+          final ref = FirebaseStorage.instance.ref().child(path);
+          ref.putFile(postTemp);
+          late Future<ListResult> futureFiles;
+          futureFiles = FirebaseStorage.instance.ref('/status_files').listAll();
+          active_statusPost = true;
+        } else {}
       },
       child: Row(
         children: [
@@ -69,7 +81,7 @@ class myStatusBlock extends StatelessWidget {
             Text(
               'Tap to add status update',
               style: TextStyle(color: Colors.black54),
-            )
+            ),
           ])
         ],
       ),

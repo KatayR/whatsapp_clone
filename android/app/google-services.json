@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "670014771336",
+    "project_id": "wapp-b6195",
+    "storage_bucket": "wapp-b6195.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670014771336:android:9675078c8a8c7f4d97cf3d",
+        "android_client_info": {
+          "package_name": "clone.arslan.whatsapp.whatsapp_clone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVyYeUwI64xGuiQr-ASNNI246goKRqVBs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670014771336:android:1c353174e155518e97cf3d",
+        "android_client_info": {
+          "package_name": "test.test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVyYeUwI64xGuiQr-ASNNI246goKRqVBs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
