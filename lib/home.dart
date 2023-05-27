@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:whatsapp_clone/provider.dart';
-import 'package:whatsapp_clone/screens/chats.dart';
-import 'package:whatsapp_clone/screens/community.dart';
+import 'package:whatsapp_clone/screens/chats_screen.dart';
+import 'package:whatsapp_clone/screens/community_screen.dart';
 import 'package:whatsapp_clone/constants/constants.dart';
-import 'package:whatsapp_clone/screens/statuses.dart';
+import 'package:whatsapp_clone/screens/statuses_screen.dart';
 import 'components/status.dart';
+import 'data/people.dart';
 
 class Home extends StatefulWidget {
   @override
