@@ -1,14 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="clone.arslan.whatsapp.whatsapp_clone">
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-    <queries>
-        <intent>
-            <action android:name="android.media.action.IMAGE_CAPTURE" />
-        </intent>
-    </queries>
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
    <application
