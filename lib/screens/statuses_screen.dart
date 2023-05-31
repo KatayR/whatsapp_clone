@@ -56,11 +56,13 @@ class _myStatusBlockState extends State<myStatusBlock> {
 
   Status? status;
 
+  var statusHasData = false;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        if (status?.statusHasData == null) {
+        if (!status!.statusHasData) {
           final post =
               await ImagePicker().pickImage(source: ImageSource.camera);
           if (post == null) return;
@@ -68,6 +70,7 @@ class _myStatusBlockState extends State<myStatusBlock> {
           final postTemp = File(post.path);
           final ref = FirebaseStorage.instance.ref().child(path);
           await ref.putFile(postTemp);
+          statusHasData = true;
         } else {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return StatusView();
@@ -85,7 +88,7 @@ class _myStatusBlockState extends State<myStatusBlock> {
           ),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
-              status?.statusHasData == null ? 'My Status' : 'Data',
+              !status!.statusHasData ? 'My Status' : "data",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 7),
