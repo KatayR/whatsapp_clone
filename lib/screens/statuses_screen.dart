@@ -8,6 +8,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:whatsapp_clone/screens/status_view.dart';
+import 'package:whatsapp_clone/components/status.dart';
 
 class Statuses extends StatefulWidget {
   const Statuses({Key? key}) : super(key: key);
@@ -48,26 +49,18 @@ class _myStatusBlockState extends State<myStatusBlock> {
   @override
   void initState() {
     super.initState();
-    checkStatusData();
-  }
-
-  Future<bool> checkStatusData() async {
-    final result =
-        await FirebaseStorage.instance.ref('/status_files').listAll();
-    statusHasData = result.items.isNotEmpty;
+    status = Status();
+    status!.checkIfEmpty();
     setState(() {});
-    return result.items.isNotEmpty;
   }
 
-  var statusHasData = false;
-
-  Future<ListResult>? futureFiles;
+  Status? status;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        if (!statusHasData) {
+        if (status?.statusHasData == null) {
           final post =
               await ImagePicker().pickImage(source: ImageSource.camera);
           if (post == null) return;
@@ -75,8 +68,6 @@ class _myStatusBlockState extends State<myStatusBlock> {
           final postTemp = File(post.path);
           final ref = FirebaseStorage.instance.ref().child(path);
           await ref.putFile(postTemp);
-          futureFiles = FirebaseStorage.instance.ref('/status_files').listAll();
-          statusHasData = true;
         } else {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return StatusView();
@@ -87,20 +78,14 @@ class _myStatusBlockState extends State<myStatusBlock> {
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
-            child: Stack(alignment: Alignment.bottomRight, children: [
-              CircleAvatar(
-                backgroundImage: AssetImage(widget.myUser.profilePic),
-                radius: 20,
-              ),
-              CircleAvatar(
-                radius: 10,
-                backgroundImage: AssetImage('assets/icons/add.png'),
-              )
-            ]),
+            child: CircleAvatar(
+              backgroundImage: AssetImage(widget.myUser.profilePic),
+              radius: 20,
+            ),
           ),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
-              !statusHasData ? 'My Status' : "data",
+              status?.statusHasData == null ? 'My Status' : 'Data',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 7),

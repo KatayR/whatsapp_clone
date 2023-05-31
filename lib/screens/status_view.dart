@@ -1,5 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:whatsapp_clone/components/status.dart';
 
 class StatusView extends StatefulWidget {
   @override
@@ -7,30 +8,13 @@ class StatusView extends StatefulWidget {
 }
 
 class _StatusViewState extends State<StatusView> {
-  var statusUrls = [];
-  Future<List<String>> getStatus() async {
-    List<String> statusUrls = [];
-    await FirebaseStorage.instance
-        .ref('/status_files')
-        .listAll()
-        .then((result) {
-      return Future.forEach(result.items, (ref) {
-        return ref.getDownloadURL().then((url) {
-          print('url $url');
-          statusUrls.add(url);
-        });
-      });
-    });
-    print('status urls $statusUrls');
-    return statusUrls;
-  }
-
+  var status = Status();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: FutureBuilder(
-          future: getStatus(),
+          future: status.getUrls(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
