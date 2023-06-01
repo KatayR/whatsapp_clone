@@ -68,7 +68,34 @@ class _MyStatusBlockState extends State<MyStatusBlock> {
           final path = 'status_files/${post.name}';
           final postTemp = File(post.path);
           final ref = FirebaseStorage.instance.ref().child(path);
-          await ref.putFile(postTemp);
+          try {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return Dialog(
+                  child: SizedBox(
+                    height: 100,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircularProgressIndicator(),
+                        Text("Uploading..."),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+            await ref.putFile(postTemp).then((_) {
+              // Remove the Dialog after the upload
+              setState(() {});
+              Navigator.pop(context);
+            });
+          } catch (e) {
+            print(e);
+            return;
+          }
           statusHasData = true;
         } else {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
