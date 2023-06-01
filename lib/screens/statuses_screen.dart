@@ -2,13 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp_clone/constants/constants.dart';
 import 'package:whatsapp_clone/data/people.dart';
-import 'package:whatsapp_clone/home.dart';
+
 import 'package:whatsapp_clone/components/status.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:whatsapp_clone/screens/status_view.dart';
-import 'package:whatsapp_clone/components/status.dart';
 
 class Statuses extends StatefulWidget {
   const Statuses({Key? key}) : super(key: key);
@@ -19,13 +18,13 @@ class Statuses extends StatefulWidget {
 
 class _StatusesState extends State<Statuses> {
   static var myUser = People(
-      profilePic: 'assets/profilePicture/myPp.png',
+      profilePic: kMyProfilePictureLocation,
       name: 'Me',
       phoneNumber: 905550001234);
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      myStatusBlock(myUser: myUser),
+      MyStatusBlock(myUser: myUser),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Icon(Icons.lock),
         Text('Your status updates are end-to-end encrypted')
@@ -34,18 +33,18 @@ class _StatusesState extends State<Statuses> {
   }
 }
 
-class myStatusBlock extends StatefulWidget {
-  myStatusBlock({
+class MyStatusBlock extends StatefulWidget {
+  MyStatusBlock({
     super.key,
     required this.myUser,
   });
   final People myUser;
 
   @override
-  State<myStatusBlock> createState() => _myStatusBlockState();
+  State<MyStatusBlock> createState() => _MyStatusBlockState();
 }
 
-class _myStatusBlockState extends State<myStatusBlock> {
+class _MyStatusBlockState extends State<MyStatusBlock> {
   @override
   void initState() {
     super.initState();
@@ -93,7 +92,7 @@ class _myStatusBlockState extends State<myStatusBlock> {
             ),
             SizedBox(height: 7),
             Text(
-              'Tap to add status update',
+              kTapToStatusMessage,
               style: TextStyle(color: Colors.black54),
             ),
           ])
