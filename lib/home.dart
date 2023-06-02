@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:whatsapp_clone/provider.dart';
@@ -110,15 +112,7 @@ class _HomeState extends State<Home> {
           floatingActionButton: currentPage == 'community'
               ? null
               : FloatingActionButton(
-                  backgroundColor: kWhatsappGreen,
-                  child: Icon(
-                    (currentPage == 'chats')
-                        ? Icons.message
-                        : (currentPage == 'status')
-                            ? Icons.camera_enhance_outlined
-                            : Icons.call,
-                    color: Colors.white,
-                  ), // Analyze Button
+                  backgroundColor: kWhatsappGreen, // Analyze Button
                   onPressed: () {
                     (currentPage == 'community')
                         ? null
@@ -129,6 +123,14 @@ class _HomeState extends State<Home> {
                                 : print('call someone');
                   },
                   elevation: 0.1,
+                  child: Icon(
+                    (currentPage == 'chats')
+                        ? Icons.message
+                        : (currentPage == 'status')
+                            ? Icons.camera_enhance_outlined
+                            : Icons.call,
+                    color: Colors.white,
+                  ),
                 ),
         ));
   }
