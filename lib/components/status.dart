@@ -13,24 +13,24 @@ class Status {
     final post = await ImagePicker().pickImage(source: ImageSource.camera);
     if (post == null) return;
 
-    final postTemp = File(post.path);
-    this.statusData = postTemp;
+    try {
+      final postTemp = File(post.path);
+      this.statusData = postTemp;
+    } catch (e) {
+      print('Error creating file from path: $e');
+    }
   }
 
   var statusUrls = [];
   Future<List<String>> getUrls() async {
     List<String> statusUrls = [];
-    await FirebaseStorage.instance
-        .ref('/status_files')
-        .listAll()
-        .then((result) {
-      return Future.forEach(result.items, (ref) {
-        return ref.getDownloadURL().then((url) {
-          print('url $url');
-          statusUrls.add(url);
-        });
-      });
-    });
+    final result =
+        await FirebaseStorage.instance.ref('/status_files').listAll();
+    for (final ref in result.items) {
+      final url = await ref.getDownloadURL();
+      print('url $url');
+      statusUrls.add(url);
+    }
     print('status urls $statusUrls');
     return statusUrls;
   }
