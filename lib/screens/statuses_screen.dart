@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:whatsapp_clone/constants/constants.dart';
 import 'package:whatsapp_clone/data/people.dart';
@@ -54,6 +54,8 @@ class _MyStatusBlockState extends State<MyStatusBlock> {
   }
 
   Status? status;
+  String downloadURL =
+      "https://firebasestorage.googleapis.com/v0/b/wapp-b6195.appspot.com/o/myPp.png?alt=media&token=d07f918f-fea8-4c8a-827a-2da6926f5c44";
 
   var statusHasData = false;
 
@@ -77,9 +79,13 @@ class _MyStatusBlockState extends State<MyStatusBlock> {
                   child: SizedBox(
                     height: 100,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         CircularProgressIndicator(),
+                        SizedBox(
+                          width: 35,
+                        ),
                         Text("Uploading..."),
                       ],
                     ),
@@ -87,10 +93,10 @@ class _MyStatusBlockState extends State<MyStatusBlock> {
                 );
               },
             );
-            await ref.putFile(postTemp).then((_) {
-              // Remove the Dialog after the upload
-              setState(() {});
+            await ref.putFile(postTemp).then((_) async {
+              downloadURL = await ref.getDownloadURL();
               Navigator.pop(context);
+              setState(() {});
             });
           } catch (e) {
             print(e);
@@ -108,7 +114,9 @@ class _MyStatusBlockState extends State<MyStatusBlock> {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: CircleAvatar(
-              backgroundImage: AssetImage(widget.myUser.profilePic),
+              backgroundImage: status!.statusHasData
+                  ? NetworkImage(downloadURL) as ImageProvider
+                  : AssetImage(widget.myUser.profilePic),
               radius: 20,
             ),
           ),
