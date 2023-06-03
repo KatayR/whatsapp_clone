@@ -6,7 +6,7 @@ import '../data/people.dart';
 class Status {
   var sender;
   var statusData;
-  bool statusHasData = false;
+  static var statusHasData = false;
   Status({this.sender, this.statusData});
 
   void postStatus(sender) async {

@@ -1,21 +1,17 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:whatsapp_clone/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/screens/chats_screen.dart';
 import 'package:whatsapp_clone/screens/community_screen.dart';
 import 'package:whatsapp_clone/constants/constants.dart';
 import 'package:whatsapp_clone/screens/statuses_screen.dart';
 import 'components/status.dart';
-import 'data/people.dart';
 
-class Home extends StatefulWidget {
-  @override
-  State<Home> createState() => _HomeState();
-}
+final indexProvider = StateProvider<int>((ref) => 1);
 
-class _HomeState extends State<Home> {
+class Home extends ConsumerWidget {
+  const Home({super.key});
   void clickHandle(String value) {
     switch (value) {
       case 'New group':
@@ -32,10 +28,10 @@ class _HomeState extends State<Home> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     double width = MediaQuery.of(context).size.width;
     double tabWidth = width / 5;
-    var pIndex = Provider.of<PageIndexProvider>(context).pIndex;
+    var pIndex = ref.watch(indexProvider);
     var currentPage = pIndex == 0
         ? 'community'
         : pIndex == 1
@@ -81,8 +77,7 @@ class _HomeState extends State<Home> {
             bottom: TabBar(
               indicatorColor: Colors.white,
               onTap: (int index) {
-                Provider.of<PageIndexProvider>(context, listen: false)
-                    .indexUpdater(index);
+                ref.read(indexProvider.notifier).state = index;
               },
               indicatorSize: TabBarIndicatorSize.label,
               isScrollable: true,

@@ -1,7 +1,6 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:whatsapp_clone/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker_android/image_picker_android.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,12 +23,7 @@ Future main() async {
     androidProvider: AndroidProvider.debug,
   );
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => PageIndexProvider(),
-        )
-      ],
+    ProviderScope(
       child: MyApp(),
     ),
   );

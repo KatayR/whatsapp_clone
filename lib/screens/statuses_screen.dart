@@ -1,13 +1,15 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/constants/constants.dart';
 import 'package:whatsapp_clone/data/people.dart';
-
 import 'package:whatsapp_clone/components/status.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:whatsapp_clone/screens/status_view.dart';
+
+final downloadURLprovider = StateProvider<String>((ref) => kUserPpURL);
 
 class Statuses extends StatefulWidget {
   const Statuses({Key? key}) : super(key: key);
@@ -24,7 +26,7 @@ class _StatusesState extends State<Statuses> {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      MyStatusBlock(myUser: myUser),
+      MyStatusBlock(),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Icon(Icons.lock),
         Text('Your status updates are end-to-end encrypted')
@@ -33,37 +35,15 @@ class _StatusesState extends State<Statuses> {
   }
 }
 
-class MyStatusBlock extends StatefulWidget {
-  MyStatusBlock({
-    super.key,
-    required this.myUser,
-  });
-  final People myUser;
+class MyStatusBlock extends ConsumerWidget {
+  const MyStatusBlock({super.key});
 
   @override
-  State<MyStatusBlock> createState() => _MyStatusBlockState();
-}
-
-class _MyStatusBlockState extends State<MyStatusBlock> {
-  @override
-  void initState() {
-    super.initState();
-    status = Status();
-    status!.checkIfEmpty();
-    setState(() {});
-  }
-
-  Status? status;
-  String downloadURL =
-      "https://firebasestorage.googleapis.com/v0/b/wapp-b6195.appspot.com/o/myPp.png?alt=media&token=d07f918f-fea8-4c8a-827a-2da6926f5c44";
-
-  var statusHasData = false;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef reff) {
+    final downloadURL = reff.watch(downloadURLprovider);
     return InkWell(
       onTap: () async {
-        if (!status!.statusHasData) {
+        if (Status.statusHasData == false) {
           final post =
               await ImagePicker().pickImage(source: ImageSource.camera);
           if (post == null) return;
@@ -94,15 +74,16 @@ class _MyStatusBlockState extends State<MyStatusBlock> {
               },
             );
             await ref.putFile(postTemp).then((_) async {
-              downloadURL = await ref.getDownloadURL();
+              reff.read(downloadURLprovider.notifier).state =
+                  await ref.getDownloadURL();
               Navigator.pop(context);
-              setState(() {});
+
+              Status.statusHasData = true;
             });
           } catch (e) {
             print(e);
             return;
           }
-          statusHasData = true;
         } else {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return StatusView();
@@ -114,15 +95,13 @@ class _MyStatusBlockState extends State<MyStatusBlock> {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: CircleAvatar(
-              backgroundImage: status!.statusHasData
-                  ? NetworkImage(downloadURL) as ImageProvider
-                  : AssetImage(widget.myUser.profilePic),
+              backgroundImage: NetworkImage(downloadURL) as ImageProvider,
               radius: 20,
             ),
           ),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
-              !status!.statusHasData ? 'My Status' : "data",
+              'My Status',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 7),
@@ -134,5 +113,6 @@ class _MyStatusBlockState extends State<MyStatusBlock> {
         ],
       ),
     );
+    ;
   }
 }
