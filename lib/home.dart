@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/screens/chats_screen.dart';
@@ -8,10 +7,13 @@ import 'package:whatsapp_clone/constants/constants.dart';
 import 'package:whatsapp_clone/screens/statuses_screen.dart';
 import 'components/status.dart';
 
+// Define a StateProvider to keep track of the current tab index
 final indexProvider = StateProvider<int>((ref) => 1);
 
 class Home extends ConsumerWidget {
   const Home({super.key});
+
+  // Define a function to handle clicks on the popup menu
   void clickHandle(String value) {
     switch (value) {
       case 'New group':
@@ -29,9 +31,14 @@ class Home extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Get the width of the screen and calculate the width of each tab
     double width = MediaQuery.of(context).size.width;
     double tabWidth = width / 5;
+
+    // Get the current tab index from the StateProvider
     var pIndex = ref.watch(indexProvider);
+
+    // Determine the current page based on the current tab index
     var currentPage = pIndex == 0
         ? 'community'
         : pIndex == 1
