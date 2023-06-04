@@ -19,14 +19,12 @@ class Statuses extends StatefulWidget {
 }
 
 class _StatusesState extends State<Statuses> {
-  static var myUser = People(
-      profilePic: kMyProfilePictureLocation,
-      name: 'Me',
-      phoneNumber: 905550001234);
+  static var myUser =
+      People(profilePic: kUserPpURL, name: 'Me', phoneNumber: 905550001234);
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      MyStatusBlock(),
+      StatusBlock(),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Icon(Icons.lock),
         Text('Your status updates are end-to-end encrypted')
@@ -35,22 +33,27 @@ class _StatusesState extends State<Statuses> {
   }
 }
 
-class MyStatusBlock extends ConsumerWidget {
-  const MyStatusBlock({super.key});
+class StatusBlock extends ConsumerWidget {
+  const StatusBlock({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef reff) {
-    final downloadURL = reff.watch(downloadURLprovider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final downloadURL = ref.watch(downloadURLprovider);
     return InkWell(
       onTap: () async {
+        // Check if there is no status data already
         if (Status.statusHasData == false) {
           final post =
               await ImagePicker().pickImage(source: ImageSource.camera);
           if (post == null) return;
+
+          // Create a reference to a Firebase Storage location using the name of the picture file
           final path = 'status_files/${post.name}';
           final postTemp = File(post.path);
-          final ref = FirebaseStorage.instance.ref().child(path);
+          final referance = FirebaseStorage.instance.ref().child(path);
           try {
+            // Show a dialog with a progress indicator to indicate that the upload is in progress
+
             showDialog(
               context: context,
               barrierDismissible: false,
@@ -73,11 +76,12 @@ class MyStatusBlock extends ConsumerWidget {
                 );
               },
             );
-            await ref.putFile(postTemp).then((_) async {
-              reff.read(downloadURLprovider.notifier).state =
-                  await ref.getDownloadURL();
+            // Upload the picture to Firebase Storage and retrieve its download URLs
+            await referance.putFile(postTemp).then((_) async {
+              ref.read(downloadURLprovider.notifier).state =
+                  await referance.getDownloadURL();
               Navigator.pop(context);
-
+              // Update the statusHasData property to indicate that there is status data available
               Status.statusHasData = true;
             });
           } catch (e) {
@@ -85,8 +89,10 @@ class MyStatusBlock extends ConsumerWidget {
             return;
           }
         } else {
+          // Navigate to the StatusView widget if there is already status data available
+
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return StatusView();
+            return StatusView(downloadURL: downloadURL);
           }));
         }
       },
