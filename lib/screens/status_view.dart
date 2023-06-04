@@ -15,6 +15,10 @@ class StatusView extends StatefulWidget {
 class _StatusViewState extends State<StatusView> with TickerProviderStateMixin {
   late AnimationController _controller;
 
+  Widget buildBottomSheet(BuildContext context) {
+    return Container();
+  }
+
   @override
   void initState() {
     _controller = AnimationController(
@@ -56,7 +60,7 @@ class _StatusViewState extends State<StatusView> with TickerProviderStateMixin {
                     backgroundColor: Colors.grey[400],
                     value: _controller.value,
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Row(
                     children: [
                       IconButton(
@@ -66,6 +70,7 @@ class _StatusViewState extends State<StatusView> with TickerProviderStateMixin {
                           Navigator.pop(context);
                         },
                       ),
+                      // Circle avatar of current user
                       Container(
                         width: 55.0,
                         height: 55.0,
@@ -102,10 +107,15 @@ class _StatusViewState extends State<StatusView> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8.0),
-                child:
-                    Icon(Icons.remove_red_eye, color: Colors.white, size: 25),
+                child: IconButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context, builder: buildBottomSheet);
+                    },
+                    icon: const Icon(Icons.remove_red_eye,
+                        color: Colors.white, size: 25)),
               )
             ],
           ),
