@@ -26,7 +26,7 @@ class _StatusesState extends State<Statuses> {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      StatusBlock(),
+      StatusBlock(isInOptions: false),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Icon(Icons.lock),
         Text('Your status updates are end-to-end encrypted')
@@ -36,7 +36,19 @@ class _StatusesState extends State<Statuses> {
 }
 
 class StatusBlock extends ConsumerWidget {
-  const StatusBlock({super.key});
+  StatusBlock({required this.isInOptions});
+  bool isInOptions;
+
+  void optionsClickHandle(String value) async {
+    switch (value) {
+      case 'Forward':
+        break;
+      case 'Share...':
+        break;
+      case 'Delete':
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,7 +64,7 @@ class StatusBlock extends ConsumerWidget {
           // Create a reference to a Firebase Storage location using the name of the picture file
           final path = 'status_files/${post.name}';
           final postTemp = File(post.path);
-          final referance = FirebaseStorage.instance.ref().child(path);
+          final reference = FirebaseStorage.instance.ref().child(path);
           try {
             // Show a dialog with a progress indicator to indicate that the upload is in progress
 
@@ -79,9 +91,9 @@ class StatusBlock extends ConsumerWidget {
               },
             );
             // Upload the picture to Firebase Storage and retrieve its download URLs
-            await referance.putFile(postTemp).then((_) async {
+            await reference.putFile(postTemp).then((_) async {
               ref.read(downloadURLprovider.notifier).state =
-                  await referance.getDownloadURL();
+                  await reference.getDownloadURL();
               Navigator.pop(context);
               // Update the statusHasData property to indicate that there is status data available
               Status.statusHasData = true;
@@ -104,28 +116,28 @@ class StatusBlock extends ConsumerWidget {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(14.0),
                 child: CircleAvatar(
                   backgroundImage: NetworkImage(downloadURL) as ImageProvider,
-                  radius: 20,
+                  radius: 25,
                 ),
               ),
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
                   'My Status',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-                SizedBox(height: 7),
+                SizedBox(height: 8),
                 Text(
                   kTapToStatusMessage,
-                  style: TextStyle(color: Colors.black54),
+                  style: TextStyle(color: Colors.black54, fontSize: 16),
                 ),
               ]),
             ],
           ),
-          if (Status.statusHasData)
+          if (Status.statusHasData && isInOptions == false)
             Transform.rotate(
-              angle: 180 * math.pi / 180,
+              angle: isInOptions ? 0 : 180 * math.pi / 180,
               child: IconButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -135,6 +147,21 @@ class StatusBlock extends ConsumerWidget {
                 icon: Icon(Icons.more_horiz),
               ),
             ),
+          if (isInOptions)
+            PopupMenuButton<String>(
+                onSelected: optionsClickHandle,
+                itemBuilder: (BuildContext context) {
+                  return {
+                    'Forward',
+                    'Share...',
+                    'Delete',
+                  }.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                })
         ],
       ),
     );
