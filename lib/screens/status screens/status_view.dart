@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsapp_clone/components/status.dart';
 import 'package:whatsapp_clone/constants/constants.dart';

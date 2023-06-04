@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/screens/chats_screen.dart';
 import 'package:whatsapp_clone/screens/community_screen.dart';
 import 'package:whatsapp_clone/constants/constants.dart';
-import 'package:whatsapp_clone/screens/statuses_screen.dart';
+import 'package:whatsapp_clone/screens/status screens/statuses_screen.dart';
 import 'components/status.dart';
 
 // Define a StateProvider to keep track of the current tab index
