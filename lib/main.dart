@@ -5,16 +5,20 @@ import 'package:image_picker_android/image_picker_android.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
 import 'home.dart';
 
 Future main() async {
+  // Set the ImagePicker implementation to use the Android photo picker
   final ImagePickerPlatform imagePickerImplementation =
       ImagePickerPlatform.instance;
   if (imagePickerImplementation is ImagePickerAndroid) {
     imagePickerImplementation.useAndroidPhotoPicker = true;
   }
+
+  // Ensure that the Flutter app is initialized
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase with the default options for the current platform
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -22,6 +26,7 @@ Future main() async {
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
     androidProvider: AndroidProvider.debug,
   );
+
   runApp(
     ProviderScope(
       child: MyApp(),
