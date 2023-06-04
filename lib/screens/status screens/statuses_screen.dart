@@ -7,7 +7,9 @@ import 'package:whatsapp_clone/components/status.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:whatsapp_clone/screens/status_view.dart';
+import 'package:whatsapp_clone/screens/status%20screens/status_options_screen.dart';
+import 'package:whatsapp_clone/screens/status%20screens/status_view.dart';
+import 'dart:math' as math;
 
 final downloadURLprovider = StateProvider<String>((ref) => kUserPpURL);
 
@@ -97,25 +99,42 @@ class StatusBlock extends ConsumerWidget {
         }
       },
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(downloadURL) as ImageProvider,
-              radius: 20,
-            ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(downloadURL) as ImageProvider,
+                  radius: 20,
+                ),
+              ),
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(
+                  'My Status',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 7),
+                Text(
+                  kTapToStatusMessage,
+                  style: TextStyle(color: Colors.black54),
+                ),
+              ]),
+            ],
           ),
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
-              'My Status',
-              style: TextStyle(fontWeight: FontWeight.bold),
+          if (Status.statusHasData)
+            Transform.rotate(
+              angle: 180 * math.pi / 180,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return StatusOptions();
+                  }));
+                },
+                icon: Icon(Icons.more_horiz),
+              ),
             ),
-            SizedBox(height: 7),
-            Text(
-              kTapToStatusMessage,
-              style: TextStyle(color: Colors.black54),
-            ),
-          ])
         ],
       ),
     );
