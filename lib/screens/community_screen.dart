@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:whatsapp_clone/constants/constants.dart';
 
-import '../home.dart';
-
 class Community extends StatefulWidget {
   const Community({Key? key}) : super(key: key);
 
@@ -11,6 +9,12 @@ class Community extends StatefulWidget {
 }
 
 class _CommunityState extends State<Community> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,14 +27,14 @@ class _CommunityState extends State<Community> {
             child: Image.asset('assets/community/communities.png'),
           ),
           SizedBox(height: 10),
-          Center(
+          const Center(
             child: Text(
               'Introducing communities',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
             child: Text(
               'Easily organize your related groups and send announcements. Now, your communities, like neighborhoods or schools, can have their own space.',
               textAlign: TextAlign.center,
@@ -41,10 +45,6 @@ class _CommunityState extends State<Community> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: MaterialButton(
-                child: Text(
-                  'Start your community',
-                  style: TextStyle(color: Colors.white),
-                ),
                 color: kWhatsappGreenDark,
                 elevation: 0,
                 height: 38,
@@ -54,7 +54,11 @@ class _CommunityState extends State<Community> {
                 ),
                 onPressed: () {
                   print('pressed community button');
-                }),
+                },
+                child: const Text(
+                  'Start your community',
+                  style: TextStyle(color: Colors.white),
+                )),
           )
         ],
       ),
