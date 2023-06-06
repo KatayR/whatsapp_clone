@@ -44,7 +44,11 @@ class _StatusViewState extends State<StatusView> with TickerProviderStateMixin {
     return Scaffold(
       body: Stack(children: [
         Center(
-          child: Image.network(widget.downloadURL),
+          child: Container(
+              color: Colors.black,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Image.network(widget.downloadURL)),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 35.0, left: 10),
