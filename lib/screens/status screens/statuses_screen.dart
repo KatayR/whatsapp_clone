@@ -75,54 +75,18 @@ class StatusBlock extends ConsumerWidget {
     final downloadURL = ref.watch(downloadURLprovider);
     return InkWell(
       onTap: () async {
+        Status status = Status();
         // Check if there is no status data already
         if (Status.statusHasData == false) {
-          final post =
-              await ImagePicker().pickImage(source: ImageSource.camera);
-          if (post == null) return;
-
-          // Create a reference to a Firebase Storage location using the name of the picture file
-          final path = 'status_files/${post.name}';
-          final postTemp = File(post.path);
-          final reference = FirebaseStorage.instance.ref().child(path);
+          // Get the image from the gallery and post it to the database
           try {
-            // Show a dialog with a progress indicator to indicate that the upload is in progress
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return Dialog(
-                  child: SizedBox(
-                    height: 100,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(
-                          width: 35,
-                        ),
-                        Text("Uploading..."),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-
-            // Upload the picture to Firebase Storage and retrieve its download URLs
-            await reference.putFile(postTemp).then((_) async {
-              ref.read(downloadURLprovider.notifier).state =
-                  await reference.getDownloadURL();
-              Navigator.pop(context);
-
-              // Update the statusHasData property to indicate that there is status data available
-              Status.statusHasData = true;
-            });
+            await status.postStatus();
           } catch (e) {
-            print(e);
+            print('Error in postStatus: $e');
             return;
           }
+          // Update the downloadURL state to the downloadURL of the image
+          ref.read(downloadURLprovider.notifier).state = status.downloadURL;
         } else {
           // Navigate to the StatusView widget if there is already status data available
           Navigator.push(context, MaterialPageRoute(builder: (context) {

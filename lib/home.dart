@@ -121,7 +121,7 @@ class Home extends ConsumerWidget {
                         : (currentPage == 'chats')
                             ? print('message')
                             : (currentPage == 'status')
-                                ? Status(sender: 'me').postStatus('me')
+                                ? Status().postStatus()
                                 : print('call someone');
                   },
                   elevation: 0.1,
