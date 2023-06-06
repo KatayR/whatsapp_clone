@@ -78,6 +78,7 @@ class StatusBlock extends StatelessWidget {
         if (Status.statusHasData == false) {
           // Get the image from the gallery and post it to the database
           try {
+            context.read<TapToCubit>().update('\u23F2 sending');
             await status.postStatus();
           } catch (e) {
             print('Error in postStatus: $e');
@@ -85,6 +86,7 @@ class StatusBlock extends StatelessWidget {
           }
           // Update the downloadURL state to the downloadURL of the image
           context.read<DownloadUrlCubit>().update(Status.downloadURL);
+          context.read<TapToCubit>().update('Just now');
         } else {
           // Navigate to the StatusView widget if there is already status data available
           Navigator.push(context, MaterialPageRoute(builder: (context) {
