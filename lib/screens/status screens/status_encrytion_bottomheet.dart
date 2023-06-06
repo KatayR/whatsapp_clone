@@ -37,10 +37,6 @@ class EncrytionBottomSheet extends StatelessWidget {
               MaterialButton(
                 onPressed: () {},
                 elevation: 0,
-                child: Text(
-                  'Learn more',
-                  style: TextStyle(color: Colors.white),
-                ),
                 color: kWhatsappGreen,
                 minWidth: MediaQuery.of(context).size.width * 0.8,
                 shape: ShapeBorder.lerp(
@@ -51,6 +47,10 @@ class EncrytionBottomSheet extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   1,
+                ),
+                child: const Text(
+                  'Learn more',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ],
