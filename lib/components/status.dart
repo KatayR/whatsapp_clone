@@ -9,7 +9,7 @@ class Status {
   String? firebasePath;
   var statusFile;
   var firebaseReference;
-  var downloadURL;
+  static var downloadURL;
 
   Future postStatus() async {
     XFile? file = await ImagePicker().pickImage(source: ImageSource.camera);
@@ -20,7 +20,7 @@ class Status {
         FirebaseStorage.instance.ref().child(firebasePath!);
     File statusFile = File(file.path);
     await firebaseReference.putFile(statusFile).then((_) async {
-      this.downloadURL = await firebaseReference.getDownloadURL();
+      downloadURL = await firebaseReference.getDownloadURL();
       // Update the statusHasData property to indicate that there is status data available
       statusHasData = true;
     });

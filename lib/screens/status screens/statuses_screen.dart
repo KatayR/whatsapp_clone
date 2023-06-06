@@ -1,19 +1,17 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp_clone/Cubit/TapToAddCubit.dart';
 import 'package:whatsapp_clone/constants/constants.dart';
 import 'package:whatsapp_clone/data/people.dart';
 import 'package:whatsapp_clone/components/status.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:whatsapp_clone/screens/status%20screens/status_encrytion_bottomheet.dart';
 import 'package:whatsapp_clone/screens/status%20screens/status_options_screen.dart';
 import 'package:whatsapp_clone/screens/status%20screens/status_view.dart';
 import 'dart:math' as math;
 
-final downloadURLprovider = StateProvider<String>((ref) => kUserPpURL);
+import '../../Cubit/DownloadUrlCubit.dart';
 
 class Statuses extends StatefulWidget {
   const Statuses({Key? key}) : super(key: key);
@@ -55,7 +53,7 @@ class _StatusesState extends State<Statuses> {
   }
 }
 
-class StatusBlock extends ConsumerWidget {
+class StatusBlock extends StatelessWidget {
   StatusBlock({required this.isInOptions});
   bool isInOptions;
 
@@ -71,8 +69,8 @@ class StatusBlock extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final downloadURL = ref.watch(downloadURLprovider);
+  Widget build(BuildContext context) {
+    final downloadURL = context.watch<DownloadUrlCubit>().state;
     return InkWell(
       onTap: () async {
         Status status = Status();
@@ -86,7 +84,7 @@ class StatusBlock extends ConsumerWidget {
             return;
           }
           // Update the downloadURL state to the downloadURL of the image
-          ref.read(downloadURLprovider.notifier).state = status.downloadURL;
+          context.read<DownloadUrlCubit>().update(Status.downloadURL);
         } else {
           // Navigate to the StatusView widget if there is already status data available
           Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -113,7 +111,7 @@ class StatusBlock extends ConsumerWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  kTapToStatusMessage,
+                  context.watch<TapToCubit>().state,
                   style: TextStyle(color: Colors.black54, fontSize: 16),
                 ),
               ]),

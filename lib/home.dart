@@ -1,16 +1,19 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/screens/chats_screen.dart';
 import 'package:whatsapp_clone/screens/community_screen.dart';
 import 'package:whatsapp_clone/constants/constants.dart';
 import 'package:whatsapp_clone/screens/status screens/statuses_screen.dart';
+import 'Cubit/CurrentTabIndexCubit.dart';
+import 'Cubit/CurrentTabIndexCubit.dart';
+import 'Cubit/DownloadUrlCubit.dart';
 import 'components/status.dart';
 
 // Define a StateProvider to keep track of the current tab index
-final indexProvider = StateProvider<int>((ref) => 1);
 
-class Home extends ConsumerWidget {
+class Home extends StatelessWidget {
   const Home({super.key});
 
   // Define a function to handle clicks on the popup menu
@@ -30,13 +33,13 @@ class Home extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     // Get the width of the screen and calculate the width of each tab
     double width = MediaQuery.of(context).size.width;
     double tabWidth = width / 5;
 
     // Get the current tab index from the StateProvider
-    var pIndex = ref.watch(indexProvider);
+    var pIndex = context.watch<CurrentTabIndexCubit>().state;
 
     // Determine the current page based on the current tab index
     var currentPage = pIndex == 0
@@ -84,7 +87,7 @@ class Home extends ConsumerWidget {
             bottom: TabBar(
               indicatorColor: Colors.white,
               onTap: (int index) {
-                ref.read(indexProvider.notifier).state = index;
+                context.read<CurrentTabIndexCubit>().update(index);
               },
               indicatorSize: TabBarIndicatorSize.label,
               isScrollable: true,
@@ -116,13 +119,18 @@ class Home extends ConsumerWidget {
               : FloatingActionButton(
                   backgroundColor: kWhatsappGreen, // Analyze Button
                   onPressed: () {
-                    (currentPage == 'community')
-                        ? null
-                        : (currentPage == 'chats')
-                            ? print('message')
-                            : (currentPage == 'status')
-                                ? Status().postStatus()
-                                : print('call someone');
+                    if (currentPage == 'community') {
+                      // Do nothing
+                    } else if (currentPage == 'chats') {
+                      print('message');
+                    } else if (currentPage == 'status') {
+                      Status().postStatus();
+                      context
+                          .read<DownloadUrlCubit>()
+                          .update(Status.downloadURL);
+                    } else {
+                      print('call someone');
+                    }
                   },
                   elevation: 0.1,
                   child: Icon(
