@@ -57,17 +57,6 @@ class StatusBlock extends StatelessWidget {
   StatusBlock({required this.isInOptions});
   bool isInOptions;
 
-  void optionsClickHandle(String value) async {
-    switch (value) {
-      case 'Forward':
-        break;
-      case 'Share...':
-        break;
-      case 'Delete':
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final downloadURL = context.watch<DownloadUrlCubit>().state;
@@ -79,7 +68,7 @@ class StatusBlock extends StatelessWidget {
           // Get the image from the gallery and post it to the database
           try {
             context.read<TapToCubit>().update('\u23F2 sending');
-            await status.postStatus();
+            await status.createAndPostStatus();
           } catch (e) {
             print('Error in postStatus: $e');
             return;
@@ -136,20 +125,33 @@ class StatusBlock extends StatelessWidget {
 
           // If we're in the options menu, show the options button.
           if (isInOptions)
-            PopupMenuButton<String>(
-                onSelected: optionsClickHandle,
-                itemBuilder: (BuildContext context) {
-                  return {
-                    'Forward',
-                    'Share...',
-                    'Delete',
-                  }.map((String choice) {
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(choice),
-                    );
-                  }).toList();
-                }),
+            PopupMenuButton<String>(onSelected: (String value) async {
+              switch (value) {
+                case 'Forward':
+                  break;
+                case 'Share...':
+                  break;
+                case 'Delete':
+                  // Delete the status from the database
+                  Status status = Status();
+                  await status.deleteStatus();
+                  context.read<DownloadUrlCubit>().update(kUserPpURL);
+                  context.read<TapToCubit>().update('Tap to add status');
+                  Navigator.pop(context);
+                  break;
+              }
+            }, itemBuilder: (BuildContext context) {
+              return {
+                'Forward',
+                'Share...',
+                'Delete',
+              }.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            }),
         ],
       ),
     );

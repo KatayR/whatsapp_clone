@@ -8,17 +8,17 @@ class Status {
   static bool statusHasData = false;
   String? firebasePath;
   var statusFile;
-  var firebaseReference;
+  static var firebaseReference;
   static var downloadURL;
 
-  Future postStatus() async {
+  Future createAndPostStatus() async {
     XFile? file = await ImagePicker().pickImage(source: ImageSource.camera);
     if (file == null) return;
 
-    this.firebasePath = 'status_files/${file.name}';
-    this.firebaseReference =
-        FirebaseStorage.instance.ref().child(firebasePath!);
+    firebasePath = 'status_files/${file.name}';
+    firebaseReference = FirebaseStorage.instance.ref().child(firebasePath!);
     File statusFile = File(file.path);
+
     await firebaseReference.putFile(statusFile).then((_) async {
       downloadURL = await firebaseReference.getDownloadURL();
       // Update the statusHasData property to indicate that there is status data available
@@ -26,44 +26,9 @@ class Status {
     });
     print('uploaded');
   }
+
+  Future deleteStatus() async {
+    await firebaseReference.delete();
+    statusHasData = false;
+  }
 }
-
-// class Status {
-//   var sender;
-//   var statusData;
-//   static var statusHasData = false;
-//   Status({this.sender, this.statusData});
-
-//   void postStatus(sender) async {
-//     final post = await ImagePicker().pickImage(source: ImageSource.camera);
-//     if (post == null) return;
-
-//     try {
-//       final postTemp = File(post.path);
-//       this.statusData = postTemp;
-//     } catch (e) {
-//       print('Error creating file from path: $e');
-//     }
-//   }
-
-//   var statusUrls = [];
-//   Future<List<String>> getUrls() async {
-//     List<String> statusUrls = [];
-//     final result =
-//         await FirebaseStorage.instance.ref('/status_files').listAll();
-//     for (final ref in result.items) {
-//       final url = await ref.getDownloadURL();
-//       print('url $url');
-//       statusUrls.add(url);
-//     }
-//     print('status urls $statusUrls');
-//     return statusUrls;
-//   }
-
-//   Future<bool> checkIfEmpty() async {
-//     final result =
-//         await FirebaseStorage.instance.ref('/status_files').listAll();
-//     statusHasData = result.items.isNotEmpty;
-//     return result.items.isNotEmpty;
-//   }
-// }
