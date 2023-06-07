@@ -124,7 +124,7 @@ class Home extends StatelessWidget {
                     } else if (currentPage == 'chats') {
                       print('message');
                     } else if (currentPage == 'status') {
-                      Status().postStatus();
+                      Status().createAndPostStatus();
                       context
                           .read<DownloadUrlCubit>()
                           .update(Status.downloadURL);
