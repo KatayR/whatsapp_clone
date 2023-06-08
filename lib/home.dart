@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/screens/chats_screen.dart';
 import 'package:whatsapp_clone/screens/community_screen.dart';
 import 'package:whatsapp_clone/constants/constants.dart';
