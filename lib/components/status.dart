@@ -7,7 +7,7 @@ import '../screens/status screens/statuses_screen.dart';
 class Status {
   static bool statusHasData = false;
   String? firebasePath;
-  var statusFile;
+  static late File statusFile;
   static var firebaseReference;
   static var downloadURL;
 
@@ -17,7 +17,7 @@ class Status {
 
     firebasePath = 'status_files/${file.name}';
     firebaseReference = FirebaseStorage.instance.ref().child(firebasePath!);
-    File statusFile = File(file.path);
+    statusFile = File(file.path);
 
     await firebaseReference.putFile(statusFile).then((_) async {
       downloadURL = await firebaseReference.getDownloadURL();

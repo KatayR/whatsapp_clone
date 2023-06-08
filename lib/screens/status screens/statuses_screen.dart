@@ -10,6 +10,7 @@ import 'package:whatsapp_clone/screens/status%20screens/status_encrytion_bottomh
 import 'package:whatsapp_clone/screens/status%20screens/status_options_screen.dart';
 import 'package:whatsapp_clone/screens/status%20screens/status_view.dart';
 import 'dart:math' as math;
+import 'package:share_plus/share_plus.dart';
 
 import '../../Cubit/DownloadUrlCubit.dart';
 
@@ -23,6 +24,7 @@ class Statuses extends StatefulWidget {
 class _StatusesState extends State<Statuses> {
   static var myUser =
       People(profilePic: kUserPpURL, name: 'Me', phoneNumber: 905550001234);
+
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -130,6 +132,7 @@ class StatusBlock extends StatelessWidget {
                 case 'Forward':
                   break;
                 case 'Share...':
+                  Share.shareFiles([Status.statusFile.path]);
                   break;
                 case 'Delete':
                   // Delete the status from the database
