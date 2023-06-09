@@ -69,7 +69,9 @@ class StatusBlock extends StatelessWidget {
         if (Status.statusHasData == false) {
           // Get the image from the gallery and post it to the database
           try {
-            context.read<TapToCubit>().update('\u23F2 sending');
+            Future.delayed(const Duration(milliseconds: 1000), () {
+              context.read<TapToCubit>().update('\u23F2 sending');
+            });
             await status.createAndPostStatus();
           } catch (e) {
             print('Error in postStatus: $e');
